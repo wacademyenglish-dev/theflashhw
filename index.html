@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WOLFLIX: S.T.A.R. Labs Assessment</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tf: {
+                            bg: '#0f172a',
+                            panel: '#1e293b',
+                            red: '#dc2626',
+                            yellow: '#fde047',
+                            blue: '#2563eb',
+                            text: '#f8fafc',
+                            muted: '#94a3b8'
+                        }
+                    },
+                    fontFamily: {
+                        hero: ['Oswald', 'sans-serif'],
+                        tech: ['Orbitron', 'sans-serif'],
+                        base: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;
+            font-family: 'Inter', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent;
+            background-image: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+        }
+
+        #mobile-container {
+            width: 100%; max-width: 450px; height: 100dvh; max-height: 900px;
+            background-color: #0f172a; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(220, 38, 38, 0.2);
+            border-top: 4px solid #dc2626;
+        }
+
+        @media (min-width: 480px) { #mobile-container { height: 90vh; border-radius: 1rem; border: 2px solid #1e3a8a; } }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; background-color: #0f172a; transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10; }
+        .screen.active { transform: translateX(0); z-index: 20; }
+        .screen.previous { transform: translateX(-100%); z-index: 10; }
+
+        /* Option Buttons */
+        .option-btn {
+            background-color: rgba(255, 255, 255, 0.05); border: 2px solid #334155; color: #f8fafc;
+            font-family: 'Inter', sans-serif; transition: all 0.2s ease; position: relative;
+            text-align: left; padding: 1.25rem; border-radius: 0.5rem; width: 100%; font-weight: 600; font-size: 1rem;
+        }
+        .option-btn:hover { border-color: #2563eb; background-color: rgba(37, 99, 235, 0.1); }
+        .option-btn.selected { border-color: #fde047; background-color: rgba(253, 224, 71, 0.1); color: #fde047; box-shadow: 0 0 15px rgba(253, 224, 71, 0.3); }
+        .option-btn.correct { border-color: #10b981; color: #10b981; background-color: rgba(16,185,129,0.1); }
+        .option-btn.wrong { border-color: #ef4444; color: #ef4444; background-color: rgba(239, 68, 68, 0.1); }
+
+        .tech-btn {
+            background: #dc2626; color: #ffffff; font-family: 'Oswald', sans-serif;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: all 0.2s;
+            width: 100%; padding: 1.25rem; border-radius: 0.5rem; border: none; font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+        .tech-btn:hover:not(:disabled) { transform: translateY(-2px) skewX(-2deg); box-shadow: 0 8px 25px rgba(220, 38, 38, 0.6); }
+        .tech-btn:disabled { background: #334155; color: #64748b; box-shadow: none; cursor: not-allowed; transform: none; }
+    </style>
+</head>
+<body>
+
+    <!-- DEVICE CONTAINER -->
+    <div id="mobile-container">
+        <!-- STATUS BAR -->
+        <div class="h-8 bg-black text-[#fde047] flex justify-between items-center px-4 text-[10px] font-tech font-bold z-50 shrink-0 border-b border-[#dc2626]">
+            <span>S.T.A.R. LABS SYSTEM</span>
+            <div class="flex gap-2 items-center"><span>ONLINE</span><span class="animate-pulse">⚡</span></div>
+        </div>
+
+        <!-- SCREEN 1: LOGIN -->
+        <div id="screen-login" class="screen active flex items-center justify-center p-8 text-center bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+            <div class="z-10 w-full flex flex-col items-center bg-tf-panel/90 p-8 rounded-xl border border-gray-700 shadow-[0_0_30px_rgba(37,99,235,0.2)] backdrop-blur-sm">
+                <span class="text-6xl mb-4 drop-shadow-[0_0_15px_#dc2626]">⚡</span>
+                <h2 class="font-tech text-xs tracking-[0.2em] text-[#3b82f6] mb-2 uppercase font-bold">Speed Force Training</h2>
+                <h1 class="font-hero text-4xl font-black tracking-widest mb-6 text-white uppercase italic drop-shadow-md">CSI Exam</h1>
+                <p class="font-base text-sm text-gray-400 mb-10 leading-relaxed bg-black/30 p-4 rounded border border-white/5">
+                    "Test your knowledge of the Past Simple and abilities. Can you fix the timeline?"
+                </p>
+                <button onclick="startQuiz()" class="tech-btn">START EXAM</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: QUIZ -->
+        <div id="screen-quiz" class="screen flex flex-col">
+            <header class="bg-[#020617] border-b border-[#1e3a8a] p-4 shrink-0 flex items-center justify-between z-20">
+                <div class="flex items-center gap-3">
+                    <span class="text-white text-lg">🏃‍♂️</span>
+                    <span class="font-hero font-bold uppercase tracking-widest text-sm text-[#3b82f6]" id="q-category">Grammar</span>
+                </div>
+                <span class="font-tech font-black text-xs text-[#020617] bg-[#fde047] px-3 py-1 rounded" id="q-counter">1/15</span>
+            </header>
+
+            <div class="w-full h-1.5 bg-black shrink-0"><div id="progress-bar" class="h-full bg-[#dc2626] shadow-[0_0_10px_#dc2626] transition-all duration-300" style="width: 0%;"></div></div>
+
+            <div class="flex-1 overflow-y-auto no-scrollbar p-6 flex flex-col relative">
+                <div class="bg-black/50 p-6 rounded-lg border border-[#1e3a8a] mb-8 border-l-4 border-l-[#fde047] shadow-inner">
+                    <h2 id="q-text" class="text-lg font-bold text-white leading-relaxed font-base">Question goes here?</h2>
+                </div>
+                <div id="options-container" class="flex flex-col gap-4 mb-8"></div>
+                <div class="flex-1"></div>
+                <div id="feedback-area" class="hidden mb-6 p-4 font-base text-sm font-bold rounded"></div>
+            </div>
+
+            <div class="p-4 bg-[#020617] border-t border-[#1e3a8a] shrink-0">
+                <button id="btn-next" onclick="handleNext()" disabled class="tech-btn py-4">CONFIRM</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: RESULTS -->
+        <div id="screen-results" class="screen flex flex-col relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+            <header class="bg-black/90 p-4 shrink-0 text-center border-b border-[#dc2626] z-10">
+                <span class="font-tech font-bold uppercase tracking-widest text-xs text-gray-400">TIMELINE SECURED</span>
+            </header>
+
+            <div class="flex-1 flex flex-col items-center justify-center p-8 text-center z-10 relative bg-tf-bg/80 backdrop-blur-sm">
+                <div id="result-icon" class="text-7xl mb-6 relative z-10 drop-shadow-[0_0_20px_#fde047] italic">⚡</div>
+                <h1 id="result-title" class="text-4xl font-hero font-black text-white uppercase tracking-widest mb-2 relative z-10 italic">Title</h1>
+                <p id="result-subtitle" class="text-sm font-tech font-bold text-gray-400 mb-8 uppercase tracking-widest relative z-10">
+                    Accuracy: <span id="final-score" class="text-[#fde047] text-lg">15</span> / 15
+                </p>
+                <div class="w-full bg-black/60 p-6 border border-[#3b82f6] rounded-lg mb-10 relative z-10 border-t-4 border-t-[#dc2626]">
+                    <p id="result-msg" class="font-base text-base text-gray-300 leading-relaxed font-medium">"Message goes here."</p>
+                </div>
+                <button onclick="restartApp()" class="w-full tech-btn text-sm py-4 relative z-10">RETURN TO LAB</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // CATEGORY 1: VOCABULARY (Time & Actions)
+            { category: "Vocabulary", question: "What does 'The Past' mean?", options: ["The time before now (Yesterday).", "The time after now (Tomorrow).", "A place in Central City."], correctIndex: 0, explanation: "The past refers to time that has already happened." },
+            { category: "Vocabulary", question: "What does the verb 'To Save' mean?", options: ["To break something.", "To keep someone safe from danger or dying.", "To forget a memory."], correctIndex: 1, explanation: "Barry wants to 'save' his mother from danger." },
+            { category: "Vocabulary", question: "What does the verb 'To Destroy' mean?", options: ["To fix a problem.", "To run very fast.", "To break something completely so it cannot be fixed."], correctIndex: 2, explanation: "Batman warned Barry that he could 'destroy' the world." },
+            { category: "Vocabulary", question: "What are 'Consequences'?", options: ["The good feelings you get when you run.", "The results of an action, usually bad or complicated.", "A type of superhero mask."], correctIndex: 1, explanation: "Changing the past has terrible consequences for the future." },
+            // CATEGORY 2: CAN / CAN'T (Abilities)
+            { category: "Grammar: Abilities", question: "Choose the correct sentence to show ability:", options: ["I can running very fast.", "I can to run very fast.", "I can run very fast."], correctIndex: 2, explanation: "After 'can', we use the base verb (without 'to' or '-ing')." },
+            { category: "Grammar: Abilities", question: "How do you say that something is impossible for you to do?", options: ["I not can fly.", "I can't fly.", "I don't can fly."], correctIndex: 1, explanation: "The negative of 'can' is 'can't' (cannot)." },
+            { category: "Grammar: Abilities", question: "Complete: Batman says, 'You _______ play God, Barry. It is too dangerous.'", options: ["can't", "can", "don't can"], correctIndex: 0, explanation: "He is telling Barry it is not possible or allowed (can't)." },
+            { category: "Grammar: Abilities", question: "Complete the question: '_______ you travel back in time?'", options: ["Do can", "Are", "Can"], correctIndex: 2, explanation: "To ask a question about ability, start with 'Can'." },
+            // CATEGORY 3: PAST SIMPLE (Regular & Irregular)
+            { category: "Grammar: Past Simple", question: "What is the past simple of the verb 'GO'?", options: ["Goes", "Went", "Goed"], correctIndex: 1, explanation: "'Go' is an irregular verb. The past is 'went'." },
+            { category: "Grammar: Past Simple", question: "What is the past simple of the verb 'SEE'?", options: ["Seed", "Saw", "Seen"], correctIndex: 1, explanation: "'See' is an irregular verb. The past is 'saw'." },
+            { category: "Grammar: Past Simple", question: "What is the past simple of the verb 'CHANGE'?", options: ["Change", "Chung", "Changed"], correctIndex: 2, explanation: "'Change' is a regular verb. We just add 'd' (changed)." },
+            { category: "Grammar: Past Simple", question: "Choose the correct sentence in the past:", options: ["Yesterday, I go back in time.", "Yesterday, I went back in time.", "Yesterday, I going back in time."], correctIndex: 1, explanation: "We use 'went' (past simple of go) for an action finished yesterday." },
+            { category: "Grammar: Past Simple", question: "Choose the correct sentence in the past:", options: ["He saved his mother in the past.", "He saves his mother in the past.", "He save his mother in the past."], correctIndex: 0, explanation: "'Saved' is the past simple of 'save'." },
+            // CATEGORY 4: CONTEXT
+            { category: "Context Analysis", question: "Why did Barry Allen (The Flash) travel back in time?", options: ["To meet Batman.", "To save his mother from dying.", "To become famous."], correctIndex: 1, explanation: "His main motivation was the tragedy of losing his mother when he was a child." },
+            { category: "Context Analysis", question: "What was the bad consequence of changing the past?", options: ["He lost his powers forever.", "He created a world without metahumans (heroes) to defend it.", "He became a villain."], correctIndex: 1, explanation: "In the new timeline he created, there were no heroes to protect Earth." }
+        ];
+
+        let currentQuestionIndex = 0; let score = 0; let hasAnswered = false; let selectedIdx = null;
+
+        function startQuiz() { currentQuestionIndex = 0; score = 0; switchScreen('screen-login', 'screen-quiz'); loadQuestion(); }
+
+        function switchScreen(oldId, newId) {
+            document.getElementById(oldId).classList.replace('active', 'previous');
+            const newScreen = document.getElementById(newId);
+            newScreen.classList.remove('previous'); newScreen.classList.add('active');
+        }
+
+        function loadQuestion() {
+            hasAnswered = false; selectedIdx = null; const q = questions[currentQuestionIndex];
+            document.getElementById('q-counter').innerText = `${currentQuestionIndex + 1}/15`;
+            document.getElementById('q-category').innerText = q.category;
+            document.getElementById('q-text').innerText = q.question;
+            document.getElementById('progress-bar').style.width = `${(currentQuestionIndex / 15) * 100}%`;
+            
+            const container = document.getElementById('options-container'); container.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
+                btn.onclick = () => selectOption(idx, btn); container.appendChild(btn);
+            });
+
+            const nextBtn = document.getElementById('btn-next'); nextBtn.disabled = true; nextBtn.innerText = "CONFIRM";
+            document.getElementById('feedback-area').classList.add('hidden');
+        }
+
+        function selectOption(idx, btn) {
+            if(hasAnswered) return; selectedIdx = idx;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected'); document.getElementById('btn-next').disabled = false;
+        }
+
+        function handleNext() {
+            if(!hasAnswered) checkAnswer();
+            else { currentQuestionIndex++; if(currentQuestionIndex < 15) loadQuestion(); else finishQuiz(); }
+        }
+
+        function checkAnswer() {
+            hasAnswered = true; const q = questions[currentQuestionIndex];
+            const btns = document.querySelectorAll('.option-btn'); const fb = document.getElementById('feedback-area');
+            if(selectedIdx === q.correctIndex) {
+                score++; btns[selectedIdx].classList.add('correct');
+                fb.className = "mb-6 p-4 font-base text-sm border border-green-500 text-green-400 bg-green-900/20 rounded";
+                fb.innerHTML = "<strong class='font-hero uppercase tracking-widest mr-2'>CORRECT:</strong> " + q.explanation;
+            } else {
+                btns[selectedIdx].classList.add('wrong'); btns[q.correctIndex].classList.add('correct');
+                fb.className = "mb-6 p-4 font-base text-sm border border-red-500 text-red-400 bg-red-900/20 rounded";
+                fb.innerHTML = "<strong class='font-hero uppercase tracking-widest mr-2'>ERROR:</strong> " + q.explanation;
+            }
+            fb.classList.remove('hidden');
+            document.getElementById('btn-next').innerText = currentQuestionIndex === 14 ? "SEE RESULTS" : "NEXT QUESTION";
+        }
+
+        function finishQuiz() {
+            switchScreen('screen-quiz', 'screen-results');
+            document.getElementById('final-score').innerText = score;
+            const titleEl = document.getElementById('result-title'); const iconEl = document.getElementById('result-icon'); const msgEl = document.getElementById('result-msg');
+            
+            if(score >= 13) {
+                titleEl.innerText = "Speedster"; iconEl.innerText = "⚡";
+                msgEl.innerHTML = "Perfect! You understand the Past Simple and the rules of time travel. The timeline is safe in your hands.";
+            } else if(score >= 8) {
+                titleEl.innerText = "CSI Assistant"; iconEl.innerText = "🔬";
+                msgEl.innerHTML = "Good job. You know the basics of 'Can' and the Past, but you need to memorize your irregular verbs before running into the past.";
+            } else {
+                titleEl.innerText = "Stuck in the Past"; iconEl.innerText = "⏳";
+                msgEl.innerHTML = "You broke the universe! You need to review the Past Simple and the vocabulary before you try again.";
+            }
+        }
+        function restartApp() { switchScreen('screen-results', 'screen-login'); }
+    </script>
+</body>
+</html>
